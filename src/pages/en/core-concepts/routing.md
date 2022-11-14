@@ -358,13 +358,16 @@ export async function getStaticPaths({ paginate }) {
   // For every tag, return a paginate() result.
   // Make sure that you pass `{params: {tag}}` to `paginate()`
   // so that Astro knows which tag grouping the result is for.
-  return allTags.map((tag) => {
+  const pages = [];
+  allTags.map((tag) => {
     const filteredPosts = allPosts.filter((post) => post.frontmatter.tag === tag);
-    return paginate(filteredPosts, {
+    pages.push(...paginate(filteredPosts, {
       params: { tag },
       pageSize: 10
-    });
+    }));
   });
+  
+  return pages;
 }
 const { page } = Astro.props;
 const params = Astro.params;
